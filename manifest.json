@@ -10,13 +10,51 @@
 	],
 	"content_scripts": [
 		{
-			"matches": [
-				"http://rips.247lib.com/*/Registration/Registration"
+			"matches": [ "http://rips.247lib.com/*/Registration/Registration" ],
+			"js": [ "js/page_controllers/CtrlRegistration.js" ]
+		},
+		{
+			"matches": [ "http://rips.247lib.com/*/ClientDetails/ClientDetails" ],
+			"js": [	"js/page_controllers/CtrlClientBasicInformation.js" ]
+		},
+		{
+			"matches": [ 
+				"http://rips.247lib.com/*/ClientDetails/ClientServicesList",
+				"http://rips.247lib.com/*/MatterAction/CreateNewServices"
 			],
-			"js": [
-				// "js/DropdownCodeContainer.js",
-				"js/page_controllers/CtrlRegistration.js"
-			]
+			"js": [ "js/page_controllers/CtrlServices.js" ]
+		},
+		{
+			"matches": [ "http://rips.247lib.com/*/MatterAction/CreateNewAction" ],
+			"js": [ "js/page_controllers/CtrlAddAction.js" ]
+		},
+		{
+			"matches": [ "http://rips.247lib.com/*/MatterAction/MatterActionsList" ],
+			"js": [ "js/page_controllers/CtrlViewActions.js" ]
+		},
+		{
+			"matches": [
+				"http://rips.247lib.com/Stars/SearchClientDetails/AdvancedSearch",
+				"http://rips.247lib.com/Stars/SearchClientDetails/ClientListSearchResult"
+			],
+			"js": [ "js/page_controllers/CtrlAdvancedSearch.js" ]
+		},
+		{
+			"matches": [
+				"http://rips.247lib.com/*/Addresses/Addresses",
+				"http://rips.247lib.com/*/ClientDetails/ClientNotes",
+				"http://rips.247lib.com/*/Aliases/Aliases",
+				"http://rips.247lib.com/*/Relatives/Relatives",
+				"http://rips.247lib.com/*/Contacts/Contacts",
+				"http://rips.247lib.com/*/FilesUpload/FilesUpload",
+				"http://rips.247lib.com/*/FilesUpload/PrivateFilesUpload",
+
+				"http://rips.247lib.com/*/SearchClientDetails/RecentlyAccessedClients",
+				"http://rips.247lib.com/*/SearchClientDetails/MyCaseload",
+
+				"http://rips.247lib.com/*/Report/ReportPreview?selectedRptGroup=*"
+			],
+			"js": [ "js/TODO:SKIP.js / rerout to Advanced Search?" ]
 		},
 		{
 			"matches": [ "http://rips.247lib.com/*" ],
