@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    	<title>Settings - RIPS Auto Import</title>
+	    
+        <script src="../js/min/angular.min.js"></script>
+        <script src="../js/min/jquery-3.1.1.min.js"></script>
+
+        <script src="../js/ErrorThrowingAPI.js"></script>
+        <!--<script src="js/FirebaseContentScriptAPI.js"></script>-->
+        <!--<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>-->
+	  
+		<script src="../js/Utils.js"></script>
+		<script src="../js/FieldTranslator.js"></script>
+		<script src="../js/app.js"></script>
+
+	    <link rel="stylesheet" href="../styles/bootstrap.min.css">
+		<link rel="stylesheet" href="../styles/importPageStyles.css">
+  	</head>
+  	<body ng-app="RIPSImportPageApp" ng-controller="MainController as ctrl">
+		<!-- Start: Main container -->
+		<div class="main-container">
+
+			<!-- Start: Main title -->
+			<div class="main-title">
+				Welcome to the RIPS Automatic Client Import Utility!
+			<!-- [end: main title] -->
+			</div>
+
+			<!-- Start: Main client data && Client data container -->
+			<div class="main-client-data client-data-container">
+				<div class="client-data-title">Paste client details below:</div>
+
+				<div class="client-data-textarea">
+					<textarea rows="10" class="form-control" id="comment"
+						placeholder="{{ ctrl.textareaWelcome }}"
+						ng-model="ctrl.clientData" ng-trim="false"></textarea>
+				</div>
+
+				<div class="client-data-errors" id="error-message-display"
+					ng-if="ctrl.errorMessages.length">
+					<strong>
+						CLIENT DATA ERROR (MUST FIX): 
+						<ul>
+							<li ng-repeat="message in ctrl.errorMessages track by $index">
+								{{ message }}
+							</li>
+						</ul>
+					</strong>
+				</div>
+
+				<!-- Start: Client data actions && actions container -->
+				<div class="client-data-actions actions-container">
+					<div class="actions-create-table">
+						<button type="button" class="btn btn-primary"
+							ng-click="ctrl.fillTable()">
+							Create Table
+						</button>
+					</div>
+					<div class="actions-import">
+						<button type="button" class="btn btn-success"
+							ng-if="!ctrl.errorMessages.length && ctrl.importEnabled"
+							ng-click="ctrl.importClients()">
+							Import Clients
+						</button>
+					</div>
+					<div class="actions-reset">
+						<button type="button" class="btn btn-danger"
+							ng-click="ctrl.clearChromeData()">
+							Clear / Reset
+						</button>
+					</div>
+				<!-- [end: client data actions && actions container] -->
+				</div>
+			<!-- [end: main client data && Client data container] -->
+			</div>
+
+			<!-- Start: Main sidebar && sidebar-container -->
+			<div class="main-sidebar sidebar-container">
+
+				<div class="sidebar-login">
+					<button type="button" class="btn" ng-if="!ctrl.username">
+						Login
+					</button>
+					<button type="button" class="btn" ng-if="ctrl.username">
+						Logout
+					</button>
+				</div>
+
+				<!-- Start: sidebar-welcome -->
+				<div class="sidebar-welcome" ng-if="ctrl.username">
+					<p><span class="sidebar-italic">Welcome,</span>
+						{ ctrl.username }</p>
+					<p><span class="sidebar-italic"># Created:</span>
+						{ ctrl.clientCount }</p>
+				<!-- [end: sidebar-welcome] -->
+				</div>
+
+				<!-- Start: sidebar-settings -->
+				<div class="sidebar-settings">
+					<span class="sidebar-italic">Settings</span>
+					<hr>
+					<!-- search criteria - how many ways should we search for clients -->
+					<p>Search Criteria</p>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="unhcr_number"
+							ng-model="ctrl.byUnhcr">
+							UNHCR Number
+						</label>
+					</div>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="phone_number"
+							ng-model="ctrl.byPhone">
+							Phone Number
+						</label>
+					</div>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="other_phone_number"
+							ng-model="ctrl.byOtherPhone">
+							"Other Phone" Number
+						</label>
+					</div>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="stars_number"
+							ng-model="ctrl.byStarsNumber">
+							StARS Number
+						</label>
+					</div>
+					<hr>
+					<!-- name matching - which names should we try to match? -->
+					<p>Name Matching</p>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="first_name"
+							ng-model="ctrl.matchFirst">
+							First Name
+						</label>
+					</div>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="last_name"
+							ng-model="ctrl.matchLast">
+							Last Name
+						</label>
+					</div>
+					<hr>
+					<!-- If import matches no clients, create new client? -->
+					<p>When No Match...</p>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="create_new_clients"
+							ng-checked="ctrl.createNew"
+							ng-click="ctrl.toggleCreateNew()">
+							Create New Clients
+						</label>
+					</div>
+					<div class="sidebar-checkbox">
+						<label>
+							<input type="checkbox" value="skip_client_creation"
+							ng-checked="!ctrl.createNew"
+							ng-click="ctrl.toggleCreateNew()">
+							Skip Client Creation
+						</label>
+					</div>
+					<hr>
+					<!-- details of data to be imported -->
+					<p>Data Details</p>
+					<div>
+						<label ng-if="!ctrl.errorMessages.length && ctrl.delim">
+							Delim: "{{ ctrl.delim }}"
+						</label>
+						<label>New-line: "\n"</label>
+					</div>
+					<hr>
+				<!-- [end: sidebar-settings] -->
+				</div>
+
+				<!-- Start: sidebar-errors -->
+				<div class="sidebar-errors">
+					<span class="sidebar-italic">Import Errors</span>
+
+					<div class="row sidebar-error" ng-if="ctrl.importErrors.length"
+						ng-repeat="err in ctrl.importErrors track by $index">
+						ERROR: {{ err }}
+					</div>
+				<!-- [end: sidebar-errors] -->
+				</div>
+			<!-- [end: main sidebar && sidebar-container] -->
+			</div>
+
+			<!-- Start: Main data table && data table container -->
+			<div class="main-data-table data-table-container"
+				ng-if="ctrl.headerArr.length">
+				
+				<div class="container-fluid" id="data-table-container"
+					ng-if="!ctrl.errorMessages.length && ctrl.delim">
+					
+					<div class="row">
+						<div ng-repeat="button in ctrl.headerArr"
+							style="width: {{ ctrl.getWidth($index) }}px;" 
+							class="data-table-buttons col-{{$index}}">
+							
+							<button class="btn btn-primary table-buttons-minus" 
+								ng-click="ctrl.decreaseWidth($index);">-</button>
+							<button class="btn btn-primary table-buttons-plus" 
+								ng-click="ctrl.increaseWidth($index);">+</button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div ng-repeat="title in ctrl.headerArr" class="col-{{$index}}"
+							style="width: {{ ctrl.getWidth($index) }}px;">
+							{{ title }}
+						</div>
+					</div>
+
+					<div class="row" ng-repeat="row in ctrl.dataArray">
+						<div ng-repeat="prop in row" class="col-{{$index}}"
+							style="width: {{ ctrl.getWidth($index) }}px;">
+							{{ prop }}
+						</div>
+					</div>
+				</div>
+				
+			<!-- [end: main data table && data table container] -->
+			</div>
+    	<!-- [end: main container] -->
+		</div>
+  	</body>
+</html>

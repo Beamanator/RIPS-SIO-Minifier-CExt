@@ -1,0 +1,45 @@
+{
+	"manifest_version": 2,
+	"name": "RIPS Extension - SIO Minifier",
+	"version": "1.0.0",
+
+	"description": "RIPS Extension - Minifies the UI seen by SIOs to enable focused effort and better concentration.",
+
+	"permissions": [
+		"tabs"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"http://rips.247lib.com/*/Registration/Registration"
+			],
+			"js": [
+				// "js/DropdownCodeContainer.js",
+				"js/page_controllers/CtrlRegistration.js"
+			]
+		},
+		{
+			"matches": [ "http://rips.247lib.com/*" ],
+			"js": [ "js/min/jquery-3.1.1.min.js",
+				"js/Utils.js",
+				"js/ErrorThrowingAPI.js",
+				"js/FieldTranslator.js",
+				// "js/FirebaseContentScriptAPI.js",
+				"js/page_controllers/MainController.js"
+			]
+		}
+	],
+	"background": {
+		"page": "html/background.html"
+	},
+	"options_page": "html/options.html",
+	"browser_action": {
+		"default_icon": {
+			"32": "img/fav128.png"
+		},
+		"default_popup": "html/popup.html"
+	},
+	"icons": {
+    	"128": "img/fav128.png"
+    }
+}
