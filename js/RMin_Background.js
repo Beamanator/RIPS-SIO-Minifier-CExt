@@ -1,13 +1,3 @@
-// Initialize firebase:
-// var config = {
-//     apiKey: "AIzaSyDRulUofq1zYX7Z1J2t--A2CRzObthoIDc",
-//     authDomain: "fedenaimportconfig.firebaseapp.com",
-//     databaseURL: "https://fedenaimportconfig.firebaseio.com",
-//     // storageBucket: "fedenaimportconfig.appspot.com",
-//     messagingSenderId: "197993359621"
-// };
-// firebase.initializeApp(config);
-
 // ================================================================================================
 //                                  MAIN EVENT LISTENERS
 // ================================================================================================
@@ -67,11 +57,6 @@ chrome.runtime.onMessage.addListener(function(mObj, MessageSender, sendResponse)
             async = true;
             break;
 
-        // import should be stopped due to a message
-        case 'stopped_via_msg':
-            stopViaMsg(mObj, sendResponse);
-            break;
-
         // add error to options page
         case 'catch_error':
             catchMessage(mObj, sendResponse);
@@ -123,36 +108,6 @@ function catchMessage(mObj, sendResponse) {
     };
 
     // store data, add_message handled in options.js now
-    storeToChromeLocalStorage(mObj2, sendResponse);
-}
-
-/**
- * Function sets action state as "FINISHED_STATE", effectively shutting down the import
- * Then sendResponse is called, letting the caller display a message or anything
- * 
- * Also, client index and client data are cleared and message (from mObj) is
- * saved as ADD_MESSAGE (if it exists)
- * 
- * TODO: phase out this function w/ Utils_SkipClient
- * 
- * @param {object} mObj - message config object from caller
- * @param {function} sendResponse - callback function for caller to use to display specific error
- */
-function stopViaMsg(mObj, sendResponse) {
-    // setup mObj:
-    var mObj2 = {
-        dataObj: {
-            'ACTION_STATE': 'FINISHED_STATE',
-            'CLIENT_DATA': '',
-            'CLIENT_INDEX': 0
-        }
-    };
-
-    // if mObj has a message attached, add ADD_MESSAGE to show user
-    if (mObj.message)
-        mObj2.dataObj['ADD_MESSAGE'] = mObj.message;
-
-    // store / clear data:
     storeToChromeLocalStorage(mObj2, sendResponse);
 }
 
@@ -211,110 +166,17 @@ function storeToChromeLocalStorage(mObj, responseCallback) {
         var dataValue = dataObj[key]; 
 
 		/* ============== AVAILABLE KEYS =============
-            ACTION_STATE    -	holds the on/off (true / false) value for each field
-                            ANALYZE_SEARCH_RESULTS_* = analyze search results based on _* value
-                                                - stars no, unhcr no, phone, other phone
-                            CHECK_CLIENT_SERVICES   = check if specific service is live for client
-                            CHECK_CLIENT_BASIC_DATA = check if client has extra basic data that needs to be saved
-                            CLIENT_ADD_ACTION_DATA  = 1) tells service ctrl to redirect to add action page
-                                                - 2) tells add action ctrl to add action
-                            CLIENT_ADD_SERVICE      = tells service ctrl to add service
-                            CLIENT_CREATED          = client created, now decide what's next
-                            CLIENT_SKIP_ACTION_DATA = service saved, go to advanced search now
-                            DO_NEXT_STEP            = call MainContent_DoNextStep() from anywhere
-                            FINISHED_STATE          = import is finished, just clear data now!
-                            NEXT_CLIENT_REDIRECT    = redirect to advanced search & increment client index
-                            REGISTER_NEW_CLIENT     = Register new client
-                            SEARCH_FOR_CLIENT_*     = start searching for clients in AdvancedSearch based on _*
-                                                - enter (stars no, unhcr no, phone, other phone), click "search"
-                            WAITING                 = Waiting for import start (hold off)
-            
             ADD_MESSAGE     -   add message to console in options.js
-
-            CLIENT_DATA     -   array of client objects
-            CLIENT_INDEX    -   index of client being imported now
-            
-            DUPLICATE_CLIENT_UNHCR_NO - array of duplicate unhcr #s
-
-            IMPORT_SETTINGS -   search / matching settings for import
 
             TODO: add audit trail (in fb?) just for me?
 		*/
 		switch (key) {
-            // action state tells extension where we're at in the lifecycle
-            case 'ACTION_STATE':
-				var actionState = dataValue;
-				storePromises.push(
-					saveValueToStorage('ACTION_STATE', actionState)
-				);
-                break;
                 
             // tells options.js to add message to console :)
             case 'ADD_MESSAGE':
                 var message = dataValue;
                 storePromises.push(
                     saveValueToStorage('ADD_MESSAGE', message)
-                );
-                break;
-
-            // stores client data directly to local storage
-            case 'CLIENT_DATA':
-				var clientArray = dataValue;
-				storePromises.push(
-					saveValueToStorage('CLIENT_DATA', clientArray)
-				);
-				break;
-
-            // FIXME: Clean this up / document this better [from old code]
-            case 'CLIENT_INDEX':
-				// console.log('updating client index with:', value, '<-');
-				if (dataValue != undefined && dataValue !== '') {
-					storePromises.push( saveValueToStorage('CLIENT_INDEX', dataValue) );
-				} else {
-					storePromises.push(
-						getValFromStorage('CLIENT_INDEX')
-						.then(function(results) {
-                            var clientIndex = results['CLIENT_INDEX'];
-
-							if (clientIndex === undefined || clientIndex === '') clientIndex = 0;
-							else if (typeof clientIndex != 'number') clientIndex = parseInt(clientIndex);
-							return saveValueToStorage('CLIENT_INDEX', clientIndex + 1);
-						})
-					);
-				}
-				break;
-                
-            // pushes a duplicate UNHCR number onto an array
-            // TODO: maybe push this back to popup somehow later to visualize
-            case 'DUPLICATE_CLIENT_UNHCR_NO':
-                var newUNHCRnum = dataValue;
-
-                storePromises.push(
-                    getValFromStorage('DUPLICATE_CLIENT_UNHCR_NO')
-                    .then(function(results) {
-                        var newDupeArray = results['DUPLICATE_CLIENT_UNHCR_NO'];
-
-                        // if dupArray was never populated (so undefined), initialize
-                        if (newDupeArray == undefined)
-                            newDupeArray = [];
-
-                        if (newUNHCRnum == undefined || newUNHCRnum === '')
-                            newDupeArray = [];
-                        else
-                            // push new duplicate UNHCR number into array
-                            newDupeArray.push(newUNHCRnum);
-
-                        // store new array of duplicate UNHCR #s
-                        return saveValueToStorage('DUPLICATE_CLIENT_UNHCR_NO', newDupeArray);
-                    })
-                );
-                break;
-
-            // stores client data directly to local storage
-            case 'IMPORT_SETTINGS':
-                var settings = dataValue;
-                storePromises.push(
-                    saveValueToStorage('IMPORT_SETTINGS', settings)
                 );
                 break;
 

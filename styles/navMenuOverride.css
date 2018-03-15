@@ -1,0 +1,38 @@
+/* li > a[href="/Stars/ClientDetails/ClientDetails"] {
+    display: none !important;
+} */
+
+/* 
+    TODO: Figure out how to shrink height of navigation bar
+    probably use nth-of-class or something like that
+*/
+
+li > a[href="/Stars/Addresses/Addresses"] {
+    display: none !important;
+}
+
+li > a[href="/Stars/ClientDetails/ClientNotes"] {
+    display: none !important;
+}
+
+li > a[href="/Stars/Aliases/Aliases"] {
+    display: none !important;
+}
+
+li > a[href="/Stars/Relatives/Relatives"] {
+    display: none !important;
+}
+
+li > a[href="/Stars/Contacts/Contacts"] {
+    display: none !important;
+}
+
+li > a[href="/Stars/FilesUpload/FilesUpload"] {
+    display: none !important;
+}
+
+li > a[href="/Stars/FilesUpload/PrivateFilesUpload"] {
+    display: none !important;
+}
+
+

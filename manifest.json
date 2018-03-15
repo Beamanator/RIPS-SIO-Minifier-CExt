@@ -10,61 +10,40 @@
 	],
 	"content_scripts": [
 		{
-			"matches": [ "http://rips.247lib.com/*/Registration/Registration" ],
-			"js": [ "js/page_controllers/CtrlRegistration.js" ]
-		},
-		{
-			"matches": [ "http://rips.247lib.com/*/ClientDetails/ClientDetails" ],
-			"js": [	"js/page_controllers/CtrlClientBasicInformation.js" ]
-		},
-		{
-			"matches": [ 
-				"http://rips.247lib.com/*/ClientDetails/ClientServicesList",
-				"http://rips.247lib.com/*/MatterAction/CreateNewServices"
-			],
-			"js": [ "js/page_controllers/CtrlServices.js" ]
-		},
-		{
-			"matches": [ "http://rips.247lib.com/*/MatterAction/CreateNewAction" ],
-			"js": [ "js/page_controllers/CtrlAddAction.js" ]
-		},
-		{
-			"matches": [ "http://rips.247lib.com/*/MatterAction/MatterActionsList" ],
-			"js": [ "js/page_controllers/CtrlViewActions.js" ]
-		},
-		{
-			"matches": [
-				"http://rips.247lib.com/Stars/SearchClientDetails/AdvancedSearch",
-				"http://rips.247lib.com/Stars/SearchClientDetails/ClientListSearchResult"
-			],
-			"js": [ "js/page_controllers/CtrlAdvancedSearch.js" ]
-		},
-		{
-			"matches": [
-				"http://rips.247lib.com/*/Addresses/Addresses",
-				"http://rips.247lib.com/*/ClientDetails/ClientNotes",
-				"http://rips.247lib.com/*/Aliases/Aliases",
-				"http://rips.247lib.com/*/Relatives/Relatives",
-				"http://rips.247lib.com/*/Contacts/Contacts",
-				"http://rips.247lib.com/*/FilesUpload/FilesUpload",
-				"http://rips.247lib.com/*/FilesUpload/PrivateFilesUpload",
-
-				"http://rips.247lib.com/*/SearchClientDetails/RecentlyAccessedClients",
-				"http://rips.247lib.com/*/SearchClientDetails/MyCaseload",
-
-				"http://rips.247lib.com/*/Report/ReportPreview?selectedRptGroup=*"
-			],
-			"js": [ "js/TODO:SKIP.js / rerout to Advanced Search?" ]
-		},
-		{
-			"matches": [ "http://rips.247lib.com/*" ],
+			"matches": [ "http://rips.247lib.com/Stars/*/*" ],
 			"js": [ "js/min/jquery-3.1.1.min.js",
-				"js/Utils.js",
-				"js/ErrorThrowingAPI.js",
-				"js/FieldTranslator.js",
-				// "js/FirebaseContentScriptAPI.js",
-				"js/page_controllers/MainController.js"
+				"js/RMin_Utils.js",
+				"js/RMin_ErrorThrowingAPI.js",
+				"js/RMin_FieldTranslator.js"
+			],
+			"css": [
+				"styles/navMenuOverride.css"
 			]
+		},
+		{
+			"matches": [ "http://rips.247lib.com/Stars/Registration/Registration" ],
+			"js": [ "js/page_controllers/RMin_CtrlRegistration.js" ]
+		},
+		{
+			"matches": [ "http://rips.247lib.com/Stars/SearchClientDetails/AdvancedSearch" ],
+			"js": [ "js/page_controllers/RMin_CtrlAdvancedSearch.js" ]
+		},
+		{
+			"matches": [
+				"http://rips.247lib.com/Stars/ClientDetails/ClientDetails",
+				"http://rips.247lib.com/Stars/Addresses/Addresses",
+				"http://rips.247lib.com/Stars/ClientDetails/ClientNotes",
+				"http://rips.247lib.com/Stars/Aliases/Aliases",
+				"http://rips.247lib.com/Stars/Relatives/Relatives",
+				"http://rips.247lib.com/Stars/Contacts/Contacts",
+				"http://rips.247lib.com/Stars/FilesUpload/FilesUpload",
+				"http://rips.247lib.com/Stars/FilesUpload/PrivateFilesUpload",
+
+				"http://rips.247lib.com/Stars/SearchClientDetails/MyCaseload",
+
+				"http://rips.247lib.com/Stars/Report/ReportPreview?selectedRptGroup=*"
+			],
+			"js": [ "js/page_controllers/RMin_CtrlReroute.js" ]
 		}
 	],
 	"background": {
@@ -75,7 +54,7 @@
 		"default_icon": {
 			"32": "img/fav128.png"
 		},
-		"default_popup": "html/popup.html"
+		"default_popup": "html/optionsPageRedirect.html"
 	},
 	"icons": {
     	"128": "img/fav128.png"
