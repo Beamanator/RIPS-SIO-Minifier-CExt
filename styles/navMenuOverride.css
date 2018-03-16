@@ -1,38 +1,21 @@
-/* li > a[href="/Stars/ClientDetails/ClientDetails"] {
-    display: none !important;
-} */
-
-/* 
-    TODO: Figure out how to shrink height of navigation bar
-    probably use nth-of-class or something like that
-*/
-
-li > a[href="/Stars/Addresses/Addresses"] {
+/* ========== Hide Client Details navigation items ========== */
+/* 1st nth-of-type: grabs Client Details ul element */
+/* 2nd nth-of-type: n + 2 gets all but first li element, which is CBI page */
+ul.MM:nth-of-type(2) > li:nth-of-type(n + 2) {
     display: none !important;
 }
 
-li > a[href="/Stars/ClientDetails/ClientNotes"] {
+/* ========== Hide Client Search navigation items ========== */
+/* 1st nth-of-type: grabs Client Search ul element */
+/* 2nd nth-of-type: 2 gets only 2nd li element, which is My Case Load page */
+ul.MM:nth-of-type(4) > li:nth-of-type(2) {
     display: none !important;
 }
 
-li > a[href="/Stars/Aliases/Aliases"] {
+/* ========== Hide Report navigation items ========== */
+/* 1st nth-of-type: grabs Reports ul element */
+/* 2nd nth-of-type: grabs Reports title h1 element */
+ul.MM:nth-of-type(5), h1.type:nth-of-type(5) {
     display: none !important;
 }
-
-li > a[href="/Stars/Relatives/Relatives"] {
-    display: none !important;
-}
-
-li > a[href="/Stars/Contacts/Contacts"] {
-    display: none !important;
-}
-
-li > a[href="/Stars/FilesUpload/FilesUpload"] {
-    display: none !important;
-}
-
-li > a[href="/Stars/FilesUpload/PrivateFilesUpload"] {
-    display: none !important;
-}
-
 
