@@ -13,8 +13,7 @@
 			"matches": [ "http://rips.247lib.com/Stars/*/*" ],
 			"js": [ "js/min/jquery-3.1.1.min.js",
 				"js/RMin_Utils.js",
-				"js/RMin_ErrorThrowingAPI.js",
-				"js/RMin_FieldTranslator.js"
+				"js/RMin_ErrorThrowingAPI.js"
 			],
 			"css": [
 				"styles/navMenuOverride.css"
@@ -30,7 +29,6 @@
 		},
 		{
 			"matches": [
-				"http://rips.247lib.com/Stars/ClientDetails/ClientDetails",
 				"http://rips.247lib.com/Stars/Addresses/Addresses",
 				"http://rips.247lib.com/Stars/ClientDetails/ClientNotes",
 				"http://rips.247lib.com/Stars/Aliases/Aliases",
@@ -46,15 +44,10 @@
 			"js": [ "js/page_controllers/RMin_CtrlReroute.js" ]
 		}
 	],
-	"background": {
-		"page": "html/background.html"
-	},
-	"options_page": "html/options.html",
 	"browser_action": {
 		"default_icon": {
 			"32": "img/fav128.png"
-		},
-		"default_popup": "html/optionsPageRedirect.html"
+		}
 	},
 	"icons": {
     	"128": "img/fav128.png"

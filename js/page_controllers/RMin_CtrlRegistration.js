@@ -13,8 +13,6 @@ $(document).ready(() => {
 	// Phone #, UNHCR #
 
 	// TODO: maybe bring back 'Neighborhood' dropdown?
-
-	//
 	$('input#LNRU_NO')
 		.parent().parent().parent().hide();
 	$('input#CDDateRegisteredLabel')
