@@ -1,5 +1,6 @@
-// ============================== PAGE CONTROLLER =======================
 /**
+ * ============================== REGISTRATION PAGE CONTROLLER =======================
+ *
  * Controller function for Registration.js - decides what fields to hide
  * 
  * Called by: Run_Registration [in MainContent.js]
